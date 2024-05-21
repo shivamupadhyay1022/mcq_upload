@@ -5,7 +5,7 @@ import { db } from "../firebase";
 import { uid } from "uid";
 
 import { push } from "firebase/database";
-import Question from "../components/Question";
+import QuestionCard from "../components/QuestionCard";
 var alert = false;
 
 function Advance() {

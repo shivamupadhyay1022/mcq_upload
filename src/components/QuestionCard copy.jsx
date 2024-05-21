@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { db } from "../firebase";
 import { set, ref, onValue, remove, update } from "firebase/database";
 import { uid } from "uid";
-function Question({ item, year, exam, sub }) {
+function QuestionCard2({ item, year, exam, sub }) {
   const [isOpen, setisOpen] = useState(false);
   const [question, setQuestion] = useState();
   const [op1, setOp1] = useState();
@@ -264,4 +264,4 @@ function Question({ item, year, exam, sub }) {
   );
 }
 
-export default Question;
+export default QuestionCard2;

@@ -9,6 +9,7 @@ import Year from "./pages/Year";
 import Mains from "./pages/Mains";
 import Advance from "./pages/Advance";
 import Neet from "./pages/Neet";
+import Questions from "./pages/Questions";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/mains" element={<Mains />} />
         <Route exact path="/advance" element={<Advance />} />
         <Route exact path="/neet" element={<Neet/>} />
+        <Route exact path="/questions" element={<Questions/>}/>
       </Routes>
     </>
   );

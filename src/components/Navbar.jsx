@@ -36,6 +36,9 @@ function Navbar() {
               <li>
                 <NavLink to={"/year"} >Year</NavLink>
               </li>
+              <li>
+                <NavLink to={"/questions"} >Questions</NavLink>
+              </li>
             </ul>
           </details>
         </div>
