@@ -1,0 +1,22 @@
+.modal-2 {
+    pointer-events: none;
+    position: fixed;
+    inset: 0px;
+    margin: 0px;
+    display: grid;
+    height: 100%;
+    max-height: none;
+    width: 100%;
+    max-width: none;
+    justify-items: center;
+    padding: 0px;
+    opacity: 0;
+    overscroll-behavior: contain;
+    z-index: 999;
+    background-color: transparent;
+    color: inherit;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    transition-property: transform, opacity, visibility;
+    overflow-y: hidden;
+}
