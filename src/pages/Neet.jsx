@@ -36,7 +36,7 @@ function Neet() {
     //registered
     const uidd = uid();
     const path = ref(db, "neet/" + year + "/" +sub + "/" + uidd);
-    console.log(path);
+    // console.log(path);
     set(path, {
       question: question,
       op1: op1,
@@ -88,7 +88,7 @@ function Neet() {
     };
     fetchData()
       .then((e) => {
-        console.log(Object.values(data));
+        // console.log(Object.values(data));
       })
       .catch((e) => {
         console.log(e);
@@ -337,7 +337,7 @@ function Neet() {
           <button
             className="btn mt-2"
             onClick={(e) => {
-              console.log(question);
+              // console.log(question);
 
               if (question) {
                 checkmsg();

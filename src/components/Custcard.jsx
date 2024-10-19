@@ -18,7 +18,7 @@ function Custcard(props) {
   return (
     <div>
       {item.question}
-      <button onClick={() => {onOpenModal(); console.log(open)}} className="btn">
+      <button onClick={() => {onOpenModal();}} className="btn">
         open modal
       </button>
 

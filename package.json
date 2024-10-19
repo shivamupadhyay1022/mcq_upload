@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^8.0.0",
+    "@ckeditor/ckeditor5-watchdog": "^42.0.0",
     "@supabase/supabase-js": "^2.43.2",
+    "ckeditor5-classic-with-mathtype": "^1.0.0",
     "firebase": "^10.12.0",
+    "formula-editor": "^1.4.3",
+    "mathjax3-react": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.2.1",

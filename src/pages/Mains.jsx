@@ -36,7 +36,7 @@ function Mains() {
     //registered
     const uidd = uid();
     const path = ref(db, "mains/" + year + "/" +sub + "/" + uidd);
-    console.log(path);
+    // console.log(path);
     set(path, {
       question: question,
       op1: op1,

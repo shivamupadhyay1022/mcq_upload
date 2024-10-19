@@ -10,9 +10,26 @@ import Mains from "./pages/Mains";
 import Advance from "./pages/Advance";
 import Neet from "./pages/Neet";
 import Questions from "./pages/Questions";
+import Latex from "./components/Latex";
 
 function App() {
   const [count, setCount] = useState(0);
+  const config = {
+    "fast-preview": {
+      disabled: true
+    },
+    tex2jax: {
+      inlineMath: [
+        ["$", "$"],
+        ["\\(", "\\)"]
+      ],
+      displayMath: [
+        ["$$", "$$"],
+        ["\\[", "\\]"]
+      ]
+    },
+    messageStyle: "none"
+  };
 
   return (
     <>

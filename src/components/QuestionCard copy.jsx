@@ -44,7 +44,6 @@ function QuestionCard2({ item, year, exam, sub }) {
   };
     function onUpdate() {
     const path = ref(db,`/${exam}/${year}/${sub}/${item.uid}`);
-    console.log(path);
     update(path, {
       question:question,
       op1:op1,
@@ -68,7 +67,6 @@ function QuestionCard2({ item, year, exam, sub }) {
           <button
             className="btn btn-square btn-sm"
             onClick={(e) => {
-              console.log(item.uid);
               handleDelete(item.uid);
             }}
           >
@@ -91,7 +89,6 @@ function QuestionCard2({ item, year, exam, sub }) {
           <button
             className="btn btn-square btn-sm"
             onClick={(e) => {
-              console.log(item.uid);
               openUpdate();
             }}
           >
@@ -246,7 +243,6 @@ function QuestionCard2({ item, year, exam, sub }) {
             <button
               className="btn mt-2"
               onClick={(e) => {
-                console.log(question);
 
                 if (question) {
                   checkmsg();

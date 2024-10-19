@@ -36,7 +36,6 @@ function Advance() {
     //registered
     const uidd = uid();
     const path = ref(db, "advance/" + year + "/" +sub + "/" + uidd);
-    console.log(path);
     set(path, {
       question: question,
       op1: op1,
@@ -88,7 +87,7 @@ function Advance() {
     };
     fetchData()
       .then((e) => {
-        console.log(Object.values(data));
+        // console.log(Object.values(data));
       })
       .catch((e) => {
         console.log(e);
@@ -337,7 +336,7 @@ function Advance() {
           <button
             className="btn mt-2"
             onClick={(e) => {
-              console.log(question);
+              // console.log(question);
 
               if (question) {
                 checkmsg();

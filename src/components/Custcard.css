@@ -12,7 +12,7 @@
     padding: 0px;
     opacity: 0;
     overscroll-behavior: contain;
-    z-index: 999;
+    /* z-index: 999; */
     background-color: transparent;
     color: inherit;
     transition-duration: 200ms;

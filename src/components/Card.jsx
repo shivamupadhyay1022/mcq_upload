@@ -13,6 +13,7 @@ function Card({image,exam_name,exam_def,url}) {
     <div className="card-actions">
         <NavLink to={url} ><button className="btn btn-primary">Questions</button></NavLink>
     </div>
+
   </div>
 </div>
   )
