@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import Exams from "./pages/Exams";
 import Viewexamquestions from "./pages/Viewexamquestions";
 import Testpurpose from "./components/Testpurpose";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <>
+    <ToastContainer/>
       <Navbar />
       <Routes>
         <Route exact path="/" element={<Home />} />

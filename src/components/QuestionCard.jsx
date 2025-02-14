@@ -1,9 +1,8 @@
 import React, { useReducer, useCallback, useState } from "react";
 import { supabase } from "../supabase";
-import { MathJaxProvider, MathJaxHtml } from "mathjax3-react";
+import uploadToImgBB from "./uploadToImgBB";
+import { toast } from "react-toastify";
 import "mathlive";
-import { TbBackground } from "react-icons/tb";
-import { Backup } from "aws-sdk";
 
 const initialState = (item) => ({
   id: item.id,
@@ -45,6 +44,16 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
         .from("questions")
         .delete()
         .eq("id", state.id);
+      toast.success("Question Deleted", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (error) throw error;
     } catch (error) {
       console.error("Delete Error:", error);
@@ -57,6 +66,16 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
         .from("questions")
         .update(state)
         .eq("id", state.id);
+        toast.success("Question Updated", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       if (error) throw error;
       toggleModal();
     } catch (error) {
@@ -82,7 +101,9 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
           loading="lazy"
         />
       ) : (
-        <math-field style={{  backgroundColor: "inherit"}} read-only>{content}</math-field>
+        <math-field style={{ backgroundColor: "inherit" }} read-only>
+          {content}
+        </math-field>
       ),
     []
   );
@@ -286,15 +307,27 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                   ></textarea>
                 </label>
               </div>
-              <div className="flex flex-col gap-4" >
-              <math-field
-                onInput={(e) => setMathInput(e.target.value)}
-                style={{ width: "100%", height: "50px", backgroundColor: "inherit",zIndex: "50000"
-                }}
-              ></math-field>
-              <p  className="w-full border-2 border-white" >{mathInput}</p>
-              <math-field style={{ width: "100%", height: "50px", backgroundColor: "inherit"
-                }} read-only>{mathInput}</math-field>
+              <div className="flex flex-col gap-4">
+                <math-field
+                  onInput={(e) => setMathInput(e.target.value)}
+                  style={{
+                    width: "100%",
+                    height: "50px",
+                    backgroundColor: "inherit",
+                    zIndex: "50000",
+                  }}
+                ></math-field>
+                <p className="w-full border-2 border-white">{mathInput}</p>
+                <math-field
+                  style={{
+                    width: "100%",
+                    height: "50px",
+                    backgroundColor: "inherit",
+                  }}
+                  read-only
+                >
+                  {mathInput}
+                </math-field>
               </div>
               <button className="btn mt-2 mb-96" onClick={onUpload}>
                 Submit
