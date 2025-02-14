@@ -5,7 +5,8 @@ import { useState } from "react";
 import QuestionCard from "../components/QuestionCard";
 // import Editor from "../components/Editor";
 import "./Question.css";
-import FormulaEditor from "formula-editor";
+import { toast } from "react-toastify";
+import uploadToImgBB from "../components/uploadToImgBB";
 
 function Questions() {
   const [quest, setQuest] = useState([]);
@@ -30,9 +31,17 @@ function Questions() {
   const [showdelaytext, setShowDelayedText] = useState(false);
   const [search, SetSearch] = useState(null);
   const [seed, setSeed] = useState(1);
-
+  const [sortOrder, setSortOrder] = useState("desc");
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState("");
+
+  // const CLIENT_ID =
+  //   "1000143815497-00gnp711u39aimapadfiohj3sckmnpd3.apps.googleusercontent.com";
+  // const API_KEY = "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";
+  // const SCOPES = "https://www.googleapis.com/auth/drive.file";
 
   async function onUpload() {
     try {
@@ -51,10 +60,16 @@ function Questions() {
           tags: tag,
         })
         .single();
-      if (error) throw error;
+      if (error) {
+        toast.error("Error adding question" + error);
+        console.log(error);
+        throw error;
+      }
+      toast.success("Question added successfully");
       window.location.reload();
     } catch (error) {
       console.log(error);
+      toast.error("Error adding question" + error);
     }
   }
 
@@ -69,13 +84,14 @@ function Questions() {
     }, 2000);
     getQuestions();
     console.log("reload");
-  }, [uppervalue]);
+  }, [uppervalue,sortOrder]);
 
   async function getQuestions() {
     try {
       const { data, error } = await supabase
         .from("questions")
         .select("*")
+        .order("id", { ascending: sortOrder === "asc" })
         .range(lowervalue, uppervalue);
       if (error) throw error;
       if (data != null) {
@@ -83,6 +99,7 @@ function Questions() {
       }
     } catch (error) {}
   }
+
   async function getsearchquestion() {
     console.log("Search");
     try {
@@ -103,23 +120,128 @@ function Questions() {
     setSeed(Math.random());
   }
 
+  async function getTagsearchquestion() {
+    console.log("Search");
+    try {
+      const { data, error } = await supabase
+        .from("questions")
+        .select("*")
+        .like("tags", "%" + search + "%")
+        .limit(10)
+        .range(lowervalue, uppervalue);
+      if (error) throw error;
+      if (data != null) {
+        setQuest(data);
+      }
+    } catch (error) {}
+  }
+
+  async function handleTagSearch() {
+    await getTagsearchquestion();
+    setSeed(Math.random());
+  }
+
+  const handleUpload = async (event, field) => {
+    const file = event.target.files[0];
+    const metadata = {
+      name: file.name,
+      mimeType: file.type,
+    };
+    // const form = new FormData();
+    // form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+    // form.append('file', file);
+
+    try {
+      // const uploadResponse = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+      //   method: 'POST',
+      //   headers: {
+      //     Authorization: `Bearer ${gapi.auth.getToken().access_token}`,
+      //   },
+      //   body: form,
+      // });
+      // const uploadedFile = await uploadResponse.json();
+
+      // if (uploadedFile.id) {
+      //   // Set file permissions to make it public
+      //   await fetch(`https://www.googleapis.com/drive/v3/files/${uploadedFile.id}/permissions`, {
+      //     method: 'POST',
+      //     headers: {
+      //       Authorization: `Bearer ${gapi.auth.getToken().access_token}`,
+      //       'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //       role: 'reader',
+      //       type: 'anyone',
+      //     }),
+      //   });
+
+      //   // Get a public link
+
+      //   const publicLink = `https://drive.google.com/uc?id=${uploadedFile.id}`;
+      //   console.log('Public link:', publicLink);
+      //   alert(`Image uploaded! View it at: ${publicLink}`);
+      // } else {
+      //   console.error('File upload failed:', uploadedFile);
+      // }
+      if (!file) {
+        alert("Please select an image first!");
+        return;
+      }
+      const url = await uploadToImgBB(file);
+      if (url) {
+        setUrl(url);
+        console.log("Embed URL:", url);
+      }
+
+      switch (field) {
+        case "question":
+          setQuestion(url);
+          break;
+        case "op1":
+          setOp1(url);
+          break;
+        case "op2":
+          setOp2(url);
+          break;
+        case "op3":
+          setOp3(url);
+          break;
+        case "op4":
+          setOp4(url);
+          break;
+        case "explanation":
+          setExplanation(url);
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
   return (
     <div>
       {!showdelaytext ? (
         <div className="absolute top-[40%] right-[40%] transform -translate-x-1/2 -translate-y-1/2 spinner md:top-1/2 md:left-1/2">
-          <div class="loader">
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
-            <div class="loader-square"></div>
+          <div className="loader">
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
+            <div className="loader-square"></div>
           </div>
         </div>
       ) : (
         <div>
+          {/* Search bar */}
+
           <label className="input input-bordered flex items-center gap-2">
+            <button className="btn" onClick={() => console.log(quest)}>
+              Console log
+            </button>
             <input
               type="text"
               className="grow h-auto"
@@ -128,7 +250,51 @@ function Questions() {
                 SetSearch(e.target.value);
               }}
             />
-            <button className="btn my-2" onClick={() => {handleSearch()}}>
+            <select
+              onChange={(e) => setSortOrder(e.target.value)}
+              value={sortOrder}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+            <button
+              className="btn my-2"
+              onClick={() => {
+                handleSearch();
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-4 w-4 opacity-70"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </label>
+          <label className="input input-bordered flex items-center gap-2">
+            <p className="" >
+             Search tags
+            </p>
+            <input
+              type="text"
+              className="grow h-auto"
+              placeholder="Search"
+              onChange={(e) => {
+                SetSearch(e.target.value);
+              }}
+            />
+            <button
+              className="btn my-2"
+              onClick={() => {
+                handleTagSearch();
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
@@ -144,6 +310,7 @@ function Questions() {
             </button>
           </label>
           {search ? (
+            // when searching
             <div key={seed} className="mx-8">
               <h1 className="w-full text-center text-xl sm:text-lg">
                 Jee Mains
@@ -480,7 +647,7 @@ function Questions() {
               <div></div>
               <div>
                 {quest.map((item) => (
-                  <QuestionCard item={item} /> // Adjust based on your data structure
+                  <QuestionCard key={Math.random()} item={item} /> // Adjust based on your data structure
                 ))}
               </div>
               <div className="flex my-4 justify-between">
@@ -537,6 +704,7 @@ function Questions() {
               </div>
             </div>
           ) : (
+            // when not searching
             <div className="mx-8">
               <h1 className="w-full text-center text-xl sm:text-lg">
                 Jee Mains
@@ -757,21 +925,52 @@ function Questions() {
                         <option>Bio</option>
                       </select>
                     </label>
-                    <textarea
-                      className="textarea w-full input-bordered"
-                      placeholder={question}
-                      onChange={(e) => {
-                        setQuestion(e.target.value);
-                      }}
-                    ></textarea>
+                    {/* set question */}
+                    {question?.substring(0, 2) === "ht" ? (
+                      <img
+                        src={question}
+                        alt="Screenshot-2025-01-15-051936"
+                        border="0"
+                      ></img>
+                    ) : (
+                      <textarea
+                        className="textarea w-full input-bordered"
+                        value={question}
+                        onChange={(e) => {
+                          setQuestion(e.target.value);
+                        }}
+                      ></textarea>
+                    )}
+
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "question")}
+                      />
+                    </div>
+                    {/* option 1 */}
                     <label className="input input-bordered flex items-center gap-2">
                       OP1
-                      <input
-                        type="text"
-                        onChange={(e) => setOp1(e.target.value)}
-                        className="grow"
-                        placeholder="Option 1"
-                      />
+                      {op1?.substring(0, 2) === "ht" ? (
+                        <img
+                          src={op1}
+                          alt="Screenshot-2025-01-15-051936"
+                          border="0"
+                        ></img>
+                      ) : (
+                        <input
+                          type="text"
+                          onChange={(e) => setOp1(e.target.value)}
+                          className="grow"
+                          placeholder="Option 1"
+                          value={op1}
+                        />
+                      )}
                       <input
                         type="radio"
                         onChange={(e) => {
@@ -781,14 +980,35 @@ function Questions() {
                         className="radio"
                       />
                     </label>
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "op1")}
+                      />
+                    </div>
+                    {/* option 2 */}
                     <label className="input input-bordered flex items-center gap-2">
                       OP2
-                      <input
-                        type="text"
-                        onChange={(e) => setOp2(e.target.value)}
-                        className="grow"
-                        placeholder="Option 2"
-                      />
+                      {op2?.substring(0, 2) === "ht" ? (
+                        <img
+                          src={op2}
+                          alt="Screenshot-2025-01-15-051936"
+                          border="0"
+                        ></img>
+                      ) : (
+                        <input
+                          type="text"
+                          onChange={(e) => setOp2(e.target.value)}
+                          className="grow"
+                          placeholder="Option 2"
+                          value={op2}
+                        />
+                      )}
                       <input
                         type="radio"
                         onChange={(e) => {
@@ -798,14 +1018,35 @@ function Questions() {
                         className="radio"
                       />
                     </label>
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "op2")}
+                      />
+                    </div>
+                    {/* option 3 */}
                     <label className="input input-bordered flex items-center gap-2">
                       OP3
-                      <input
-                        type="text"
-                        onChange={(e) => setOp3(e.target.value)}
-                        className="grow"
-                        placeholder="Option 3"
-                      />
+                      {op3?.substring(0, 2) === "ht" ? (
+                        <img
+                          src={op3}
+                          alt="Screenshot-2025-01-15-051936"
+                          border="0"
+                        ></img>
+                      ) : (
+                        <input
+                          type="text"
+                          onChange={(e) => setOp3(e.target.value)}
+                          className="grow"
+                          placeholder="Option 3"
+                          value={op3}
+                        />
+                      )}
                       <input
                         type="radio"
                         onChange={(e) => {
@@ -815,14 +1056,35 @@ function Questions() {
                         className="radio"
                       />
                     </label>
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "op3")}
+                      />
+                    </div>
+                    {/* option 4 */}
                     <label className="input input-bordered flex items-center gap-2">
                       OP4
-                      <input
-                        type="text"
-                        onChange={(e) => setOp4(e.target.value)}
-                        className="grow"
-                        placeholder="Option 4"
-                      />
+                      {op4?.substring(0, 2) === "ht" ? (
+                        <img
+                          src={op4}
+                          alt="Screenshot-2025-01-15-051936"
+                          border="0"
+                        ></img>
+                      ) : (
+                        <input
+                          type="text"
+                          onChange={(e) => setOp4(e.target.value)}
+                          className="grow"
+                          placeholder="Option 4"
+                          value={op4}
+                        />
+                      )}
                       <input
                         type="radio"
                         onChange={(e) => {
@@ -832,26 +1094,58 @@ function Questions() {
                         className="radio"
                       />
                     </label>
-                    <label className="input input-bordered flex items-center gap-2">
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "op4")}
+                      />
+                    </div>
+                    {/* <label className="input input-bordered flex items-center gap-2">
                       Correct
                       <input
                         type="text"
-                        onChange={(e) => setOp4(e.target.value)}
+                        onChange={(e) => setCorrect(e.target.value)}
                         className="grow"
                         placeholder="Option 4"
                         required
                       />
-                    </label>
+                    </label> */}
+                    {/* explanation */}
                     <label className="input input-bordered flex items-center gap-2">
                       Explanation
-                      <input
-                        type="text"
-                        onChange={(e) => setExplanation(e.target.value)}
-                        className="grow"
-                        placeholder="Explanation"
-                        required
-                      />
+                      {explanation?.substring(0, 2) === "ht" ? (
+                        <img
+                          src={explanation}
+                          alt="Screenshot-2025-01-15-051936"
+                          border="0"
+                          className="h-auto py-2"
+                        ></img>
+                      ) : (
+                        <input
+                          type="text"
+                          onChange={(e) => setExplanation(e.target.value)}
+                          className="grow"
+                          placeholder="Explanation"
+                          value={explanation}
+                        />
+                      )}
                     </label>
+                    {/* file input */}
+                    <div className="flex justify-end">
+                      {/* <button onClick={handleAuthClick}>
+                        Sign in with Google
+                      </button> */}
+                      <input
+                        type="file"
+                        className="btn input file-input p-1 justify-self-end"
+                        onChange={(e) => handleUpload(e, "explanation")}
+                      />
+                    </div>
                     {/* <Editor /> */}
                     {/* <FormulaEditor 
               placeholder = {'Start typing...'}
@@ -870,12 +1164,17 @@ function Questions() {
                   {/* </form> */}
                 </div>
               </dialog>
-              <div></div>
+
+              {/* Question List       */}
+
               <div>
                 {quest.map((item) => (
                   <QuestionCard item={item} /> // Adjust based on your data structure
                 ))}
               </div>
+
+              {/* Pagination */}
+
               <div className="flex my-4 justify-between">
                 <button
                   className="btn"

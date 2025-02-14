@@ -96,6 +96,10 @@
     transform: rotate(45deg);
    }
    
+   .ML__keyboard {
+    z-index: 100000 !important;
+  }
+
    .loader-square {
     position: absolute;
     top: 0;
