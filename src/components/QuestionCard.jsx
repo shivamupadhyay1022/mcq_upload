@@ -80,6 +80,16 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
       toggleModal();
     } catch (error) {
       console.error("Update Error:", error);
+      toast.error("Error :"+error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   }, [state, toggleModal]);
 
@@ -201,7 +211,7 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                       })
                     }
                   >
-                    <option disabled>Pick one</option>
+                    <option selected>Pick one</option>
                     <option>Single Correct</option>
                     <option>Multiple Correct</option>
                     <option>Numerical/Fill in the Blanks</option>
@@ -223,11 +233,11 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                       })
                     }
                   >
-                    <option disabled>Pick one</option>
-                    <option>Physics</option>
-                    <option>Chemistry</option>
-                    <option>Maths</option>
-                    <option>Bio</option>
+                    <option selected   >Pick one</option>
+                    <option value={"Physics"} >Physics</option>
+                    <option value={"Chemistry"} >Chemistry</option>
+                    <option value={"Maths"} >Maths</option>
+                    <option value={"Bio"} >Bio</option>
                   </select>
                 </label>
 

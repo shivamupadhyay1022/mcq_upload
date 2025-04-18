@@ -166,7 +166,7 @@ function Questions() {
         <dialog className="modal modal-open">
           <div className="modal-box flex flex-col max-w-[48rem]">
             <div className="flex justify-between">
-              <h3 className="font-bold my-2 text-lg">Update Question</h3>
+              <h3 className="font-bold my-2 text-lg">Add Question</h3>
               <button
                 className="btn btn-square btn-sm"
                 onClick={() => setOpen(!open)}
@@ -198,7 +198,7 @@ function Questions() {
                     })
                   }
                 >
-                  <option disabled>Pick one</option>
+                  <option selected>Pick one</option>
                   <option>Single Correct</option>
                   <option>Multiple Correct</option>
                   <option>Numerical/Fill in the Blanks</option>
@@ -220,7 +220,7 @@ function Questions() {
                     })
                   }
                 >
-                  <option disabled>Pick one</option>
+                  <option selected>Pick one</option>
                   <option>Physics</option>
                   <option>Chemistry</option>
                   <option>Maths</option>
