@@ -66,21 +66,21 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
         .from("questions")
         .update(state)
         .eq("id", state.id);
-        toast.success("Question Updated", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
+      toast.success("Question Updated", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       if (error) throw error;
       toggleModal();
     } catch (error) {
       console.error("Update Error:", error);
-      toast.error("Error :"+error, {
+      toast.error("Error :" + error, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -101,22 +101,42 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
     });
   }, []);
 
-  const renderImageOrText = useCallback(
-    (content) =>
-      content.startsWith("http") ? (
+  const renderImageOrText = useCallback((content) => {
+    const parts = content.split("::::");
+  
+    return parts.map((part, index) => {
+      const isImage = index % 2 === 1;
+  
+      if (!isImage) {
+        // Regular math content
+        return (
+          <math-field
+            key={index}
+            read-only
+            style={{ backgroundColor: "inherit", display: "block", margin: "8px 0" }}
+          >
+            {part}
+          </math-field>
+        );
+      }
+  
+      // Handle image content: "url::height::width"
+      const [src, height, width] = part.split("::").map((p) => p.trim());
+  
+      return (
         <img
-          src={content}
-          alt="content-img"
-          className="h-auto py-2"
+          key={index}
+          src={src}
+          alt={`inline-img-${index}`}
+          height={height || "auto"}
+          width={width || "auto"}
+          style={{ margin: "10px 0", maxWidth: "100%", height: height ? `${height}px` : "auto", width: width ? `${width}px` : "auto" }}
           loading="lazy"
         />
-      ) : (
-        <math-field style={{ backgroundColor: "inherit" }} read-only>
-          {content}
-        </math-field>
-      ),
-    []
-  );
+      );
+    });
+  }, []);
+  
 
   const handleUpload = async (event, field) => {
     const file = event.target.files[0];
@@ -211,7 +231,7 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                       })
                     }
                   >
-                    <option selected>Pick one</option>
+                    <option defaultValue>Pick one</option>
                     <option>Single Correct</option>
                     <option>Multiple Correct</option>
                     <option>Numerical/Fill in the Blanks</option>
@@ -233,31 +253,22 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                       })
                     }
                   >
-                    <option selected   >Pick one</option>
-                    <option value={"Physics"} >Physics</option>
-                    <option value={"Chemistry"} >Chemistry</option>
-                    <option value={"Maths"} >Maths</option>
-                    <option value={"Bio"} >Bio</option>
+                    <option defaultValue>Pick one</option>
+                    <option value={"Physics"}>Physics</option>
+                    <option value={"Chemistry"}>Chemistry</option>
+                    <option value={"Maths"}>Maths</option>
+                    <option value={"Bio"}>Bio</option>
                   </select>
                 </label>
 
                 <label className="input h-fit input-bordered">
                   Question
-                  {state.question.startsWith("ht") ? (
-                    <img
-                      src={state.question}
-                      alt="question-img"
-                      className="h-auto py-2"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <textarea
-                      name="question"
-                      className="textarea w-full input-bordered"
-                      value={state.question}
-                      onChange={handleChange}
-                    ></textarea>
-                  )}
+                  <textarea
+                    name="question"
+                    className="textarea w-full input-bordered"
+                    value={state.question}
+                    onChange={handleChange}
+                  ></textarea>
                   <input
                     type="file"
                     className="btn input file-input p-1 justify-self-end"
@@ -268,21 +279,14 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                 {[1, 2, 3, 4].map((num) => (
                   <div key={num} className="flex w-full gap-2">
                     <span>Option {num}</span>
-                    {state[`option${num}`].startsWith("ht") ? (
-                      <img
-                        src={state[`option${num}`]}
-                        alt="option-img"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <input
-                        name={`option${num}`}
-                        type="text"
-                        className="grow input input-bordered"
-                        value={state[`option${num}`]}
-                        onChange={handleChange}
-                      />
-                    )}
+
+                    <input
+                      name={`option${num}`}
+                      type="text"
+                      className="grow input input-bordered"
+                      value={state[`option${num}`]}
+                      onChange={handleChange}
+                    />
 
                     <input
                       type="file"

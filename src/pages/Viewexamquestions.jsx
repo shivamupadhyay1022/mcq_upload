@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "../supabase";
 import QuestionCard from "../components/QuestionCard";
+import { ToastContainer } from "react-toastify";
 function Viewexamquestions() {
     const [Questionlist, setQuestionlist] = useState([]);
   const [showdelaytext, setShowDelayedText] = useState(false);
@@ -53,6 +54,7 @@ function Viewexamquestions() {
 
   return (
     <div>
+      <ToastContainer/>
       {" "}
       {!showdelaytext ? (
         <div className="absolute top-[40%] right-[40%] transform -translate-x-1/2 -translate-y-1/2 spinner md:top-1/2 md:left-1/2">
@@ -70,7 +72,7 @@ function Viewexamquestions() {
         <div className="flex flex-col">
           <div>
             {Questionlist.map((item) => (
-              <QuestionCard key={seed} item={item} /> // Adjust based on your data structure
+              <QuestionCard key={item.id} item={item} /> // Adjust based on your data structure
             ))}
           </div>
         </div>

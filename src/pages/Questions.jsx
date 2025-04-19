@@ -132,6 +132,8 @@ function Questions() {
     }
   };
 
+  
+
   return (
     <div className="container mx-auto p-4">
       {/* Search & Sort */}
@@ -229,39 +231,24 @@ function Questions() {
               </label>
 
               <label className="input h-fit input-bordered">
-                Question
-                {state.question.startsWith("ht") ? (
-                  <img
-                    src={state.question}
-                    alt="question-img"
-                    className="h-auto py-2"
-                    loading="lazy"
-                  />
-                ) : (
+                  Question
                   <textarea
                     name="question"
                     className="textarea w-full input-bordered"
                     value={state.question}
                     onChange={handleChange}
                   ></textarea>
-                )}
-                <input
-                  type="file"
-                  className="btn input file-input p-1 justify-self-end"
-                  onChange={(e) => handleUpload(e, "question")}
-                />
-              </label>
+                  <input
+                    type="file"
+                    className="btn input file-input p-1 justify-self-end"
+                    onChange={(e) => handleUpload(e, "question")}
+                  />
+                </label>
 
-              {[1, 2, 3, 4].map((num) => (
-                <div key={num} className="flex w-full gap-2">
-                  <span>Option {num}</span>
-                  {state[`option${num}`].startsWith("ht") ? (
-                    <img
-                      src={state[`option${num}`]}
-                      alt="option-img"
-                      loading="lazy"
-                    />
-                  ) : (
+                {[1, 2, 3, 4].map((num) => (
+                  <div key={num} className="flex w-full gap-2">
+                    <span>Option {num}</span>
+
                     <input
                       name={`option${num}`}
                       type="text"
@@ -269,36 +256,28 @@ function Questions() {
                       value={state[`option${num}`]}
                       onChange={handleChange}
                     />
-                  )}
 
-                  <input
-                    type="file"
-                    className="btn input file-input p-1 justify-self-end"
-                    onChange={(e) => handleUpload(e, `option${num}`)}
-                  />
-                  <input
-                    type="radio"
-                    checked={state.correct === `option${num}`}
-                    onChange={() =>
-                      dispatch({
-                        type: "UPDATE_FIELD",
-                        field: "correct",
-                        value: `option${num}`,
-                      })
-                    }
-                  />
-                </div>
-              ))}
+                    <input
+                      type="file"
+                      className="btn input file-input p-1 justify-self-end"
+                      onChange={(e) => handleUpload(e, `option${num}`)}
+                    />
+                    <input
+                      type="radio"
+                      checked={state.correct === `option${num}`}
+                      onChange={() =>
+                        dispatch({
+                          type: "UPDATE_FIELD",
+                          field: "correct",
+                          value: `option${num}`,
+                        })
+                      }
+                    />
+                  </div>
+                ))}
 
-              <label className="input h-auto input-bordered">
-                Explanation
-                {state.explanation.startsWith("ht") ? (
-                  <img
-                    src={state.explanation}
-                    alt="option-img"
-                    loading="lazy"
-                  />
-                ) : (
+                <label className="input h-auto input-bordered">
+                  Explanation
                   <textarea
                     name="explanation"
                     className="w-full textarea textarea-bordered overflow-hidden"
@@ -309,13 +288,7 @@ function Questions() {
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                   ></textarea>
-                )}
-                <input
-                    type="file"
-                    className="btn input file-input p-1 justify-self-end"
-                    onChange={(e) => handleUpload(e, `explanation`)}
-                  />
-              </label>
+                </label>
             </div>
             <div className="flex flex-col gap-4">
               <math-field

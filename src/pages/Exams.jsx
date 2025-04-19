@@ -243,7 +243,7 @@ function Exams() {
               <div></div>
               <div>
                 {examlist.map((item) => (
-                  <Examcard item={item} /> // Adjust based on your data structure
+                  <Examcard key={item.id} item={item} /> // Adjust based on your data structure
                 ))}
               </div>
               <div className="flex my-4 justify-between">
