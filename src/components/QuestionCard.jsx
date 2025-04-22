@@ -3,6 +3,7 @@ import { supabase } from "../supabase";
 import uploadToImgBB from "./uploadToImgBB";
 import { toast } from "react-toastify";
 import "mathlive";
+import {parseTextWithImages} from "./parseTextWithImages"
 
 const initialState = (item) => ({
   id: item.id,
@@ -101,41 +102,7 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
     });
   }, []);
 
-  const renderImageOrText = useCallback((content) => {
-    const parts = content.split("::::");
-  
-    return parts.map((part, index) => {
-      const isImage = index % 2 === 1;
-  
-      if (!isImage) {
-        // Regular math content
-        return (
-          <math-field
-            key={index}
-            read-only
-            style={{ backgroundColor: "inherit", display: "block", margin: "8px 0" }}
-          >
-            {part}
-          </math-field>
-        );
-      }
-  
-      // Handle image content: "url::height::width"
-      const [src, height, width] = part.split("::").map((p) => p.trim());
-  
-      return (
-        <img
-          key={index}
-          src={src}
-          alt={`inline-img-${index}`}
-          height={height || "auto"}
-          width={width || "auto"}
-          style={{ margin: "10px 0", maxWidth: "100%", height: height ? `${height}px` : "auto", width: width ? `${width}px` : "auto" }}
-          loading="lazy"
-        />
-      );
-    });
-  }, []);
+
   
 
   const handleUpload = async (event, field) => {
@@ -179,12 +146,12 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
           </button>
         </div>
 
-        {renderImageOrText(state.question)}
+        {parseTextWithImages(state.question)}
 
         {[1, 2, 3, 4].map((num) => (
           <p key={num}>
             <span>Option {num}:</span>{" "}
-            {renderImageOrText(state[`option${num}`])}
+            {parseTextWithImages(state[`option${num}`])}
           </p>
         ))}
 
@@ -192,7 +159,7 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
           <span>Correct:</span> {state.correct || "Not Selected"}
         </p>
         <p>
-          <span>Explanation:</span> {renderImageOrText(state.explanation)}
+          <span>Explanation:</span> {parseTextWithImages(state.explanation)}
         </p>
 
         {open && (

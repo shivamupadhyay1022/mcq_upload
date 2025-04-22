@@ -181,6 +181,7 @@ function Questions() {
               <input
                 name="tags"
                 type="text"
+                placeholder="Tags"
                 className="input input-bordered"
                 value={state.tags}
                 onChange={handleChange}
@@ -288,6 +289,11 @@ function Questions() {
                       e.target.style.height = e.target.scrollHeight + "px";
                     }}
                   ></textarea>
+                  <input
+                      type="file"
+                      className="btn input file-input p-1 justify-self-end"
+                      onChange={(e) => handleUpload(e, `explanation`)}
+                    />
                 </label>
             </div>
             <div className="flex flex-col gap-4">
