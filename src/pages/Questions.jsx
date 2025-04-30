@@ -228,6 +228,8 @@ function Questions() {
                   <option>Chemistry</option>
                   <option>Maths</option>
                   <option>Bio</option>
+                  <option value={"English"}>English</option>
+                  <option value={"Logical"}>Logical</option>
                 </select>
               </label>
 

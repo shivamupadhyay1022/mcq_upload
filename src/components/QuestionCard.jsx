@@ -225,6 +225,8 @@ const QuestionCard = React.memo(({ item, onDelete }) => {
                     <option value={"Chemistry"}>Chemistry</option>
                     <option value={"Maths"}>Maths</option>
                     <option value={"Bio"}>Bio</option>
+                    <option value={"English"}>English</option>
+                    <option value={"Logical"}>Logical</option>
                   </select>
                 </label>
 
