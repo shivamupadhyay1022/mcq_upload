@@ -16,6 +16,7 @@ import Exams from "./pages/Exams";
 import Viewexamquestions from "./pages/Viewexamquestions";
 import Testpurpose from "./components/Testpurpose";
 import { ToastContainer } from "react-toastify";
+import Express from "./pages/Express";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -44,6 +45,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/questions" element={<Questions/>}/>
         <Route exact path="/exams" element={<Exams/>}/>
+        <Route exact path="/express" element={<Express/>}/>
         <Route  path="/viewexamquestions/:param" element={<Viewexamquestions/>}/>
         <Route  path="/test" element={<Testpurpose/>}/>
 

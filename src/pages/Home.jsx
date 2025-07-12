@@ -21,6 +21,16 @@ function Home() {
           />
         </div>
       </div>
+      <div className="flex flex-col mt-4 w-full lg:flex-row">
+        <div className="grid flex-grow h-auto card rounded-box place-items-center">
+          <Card
+            exam_name={"Express"}
+            exam_def={"Quick ai like features"}
+            url={"/express"}
+          />
+        </div>
+        {/* <div className="divider lg:divider-horizontal">OR</div> */}
+      </div>
     </div>
   );
 }
